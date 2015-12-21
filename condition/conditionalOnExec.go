@@ -39,7 +39,7 @@ func (n execConditional) Valid(ctx *core.Context) (bool, error) {
 			return false, nil
 		}
 		log.Printf("error: Verify Run: %s", err)
-		return false, nil
+		return false, err
 	}
 
 	return true, nil
