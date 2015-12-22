@@ -4,7 +4,7 @@
 
 ## Install
 
-**Killswitch* is a Go application. The easiest way to intall it is via `go get`:
+**Killswitch** is a Go application. The easiest way to intall it is via `go get`:
 
 ```bash
  go get -v github.com/bep/killswitch
@@ -18,8 +18,8 @@ Wrap your sensitive application with a kill switch.
 
 Provide a path to the program to watch and its arguments (optional), and then a conditional.
 
-The conditional can be a built-in (see the net command) or a heartbeat-script
-you can write yourself (see the exec command).
+The conditional can be a built-in (see the `net` command) or a heartbeat-script
+you can write yourself (see the `exec` command).
 
 
 ```
@@ -40,6 +40,12 @@ killswitch net
 
 ```
   -n, --name string   The name of the network interface that must be present
+```
+
+To get the correct interface name to use with this command, try 
+
+```
+killswitch net list
 ```
 
 ## killswitch exec
