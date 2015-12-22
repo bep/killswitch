@@ -33,7 +33,7 @@ var execArgs string
 var interval int
 var verbose bool
 
-var rootCmd = &cobra.Command{
+var RootCmd = &cobra.Command{
 	Use:   "killswitch",
 	Short: "Wrap your sensitive application with a kill switch",
 	Long: `Wrap your sensitive application with a kill switch.
@@ -47,10 +47,10 @@ you can write yourself (see the exec command).
 
 func Execute() {
 
-	rootCmd.SetOutput(logWriter)
-	rootCmd.SilenceUsage = true
+	RootCmd.SetOutput(logWriter)
+	RootCmd.SilenceUsage = true
 
-	if c, err := rootCmd.ExecuteC(); err != nil {
+	if c, err := RootCmd.ExecuteC(); err != nil {
 		if _, ok := err.(userError); ok {
 			c.Println("")
 			c.Println(c.UsageString())
@@ -61,7 +61,7 @@ func Execute() {
 }
 
 func init() {
-	rootCmd.PersistentFlags().StringVarP(&executable, "exec", "e", "", "The program to watch")
-	rootCmd.PersistentFlags().StringVarP(&execArgs, "args", "a", "", "The program argument list")
-	rootCmd.PersistentFlags().IntVar(&interval, "interval", 5, "Interval between checks in seconds")
+	RootCmd.PersistentFlags().StringVarP(&executable, "exec", "e", "", "The program to watch")
+	RootCmd.PersistentFlags().StringVarP(&execArgs, "args", "a", "", "The program argument list")
+	RootCmd.PersistentFlags().IntVar(&interval, "interval", 5, "Interval between checks in seconds")
 }

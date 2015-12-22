@@ -59,7 +59,7 @@ var listInterfacesCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(netinterfaceCmd)
+	RootCmd.AddCommand(netinterfaceCmd)
 	netinterfaceCmd.AddCommand(listInterfacesCmd)
 
 	netinterfaceCmd.Flags().StringVarP(&heartbeatScript, "name", "n", "", "The name of the network interface that must be present")

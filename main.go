@@ -15,9 +15,13 @@
 package main
 
 import (
+	"fmt"
 	"github.com/bep/killswitch/cmd"
+	"github.com/spf13/cobra"
 )
 
 func main() {
-	cmd.Execute()
+	//cmd.Execute()
+	fmt.Println("md")
+	cobra.GenMarkdownTree(cmd.RootCmd, "/Users/bep/tmp/")
 }
