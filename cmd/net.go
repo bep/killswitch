@@ -19,24 +19,48 @@ import (
 	"github.com/bep/killswitch/condition"
 	"github.com/bep/killswitch/core"
 	"github.com/spf13/cobra"
+	"net"
 )
 
 var networkInterface string
 
 var netinterfaceCmd = &cobra.Command{
-	Use:   "netinterface",
+	Use:   "net",
 	Short: "Will kill your executable if a given network interface vanishes",
 
 	RunE: func(cmd *cobra.Command, args []string) error {
+		if len(executable) == 0 {
+			return userError{"Must provide an executable to watch. Note that this must either in PATH or set as a full path."}
+		}
 		fmt.Printf("Starting %s with kill switch on interface %s ...\n", executable, networkInterface)
 		conditional := condition.NewNetworkInterfaceConditional(networkInterface)
-		ctx := &core.Context{Verbose: verbose, Executable: executable, Args: execArgs, Interval: interval}
+		ctx := &core.Context{Executable: executable, Args: execArgs, Interval: interval}
 		return core.Run(ctx, conditional)
+	},
+}
+
+var listInterfacesCmd = &cobra.Command{
+	Use:   "list",
+	Short: "List your network interfaces",
+
+	RunE: func(cmd *cobra.Command, args []string) error {
+		networkInterfaces, err := net.Interfaces()
+		if err != nil {
+			return err
+		}
+		fmt.Printf("Network interfaces (%d):\n", len(networkInterfaces))
+		for i, in := range networkInterfaces {
+			addrs, _ := in.Addrs()
+			fmt.Println(i+1, in.Name, addrs)
+		}
+		return nil
+
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(netinterfaceCmd)
+	netinterfaceCmd.AddCommand(listInterfacesCmd)
 
-	netinterfaceCmd.Flags().StringVarP(&networkInterface, "interface", "i", "", "The network interface that must be present")
+	netinterfaceCmd.Flags().StringVarP(&networkInterface, "name", "n", "", "The name of the network interface that must be present")
 }

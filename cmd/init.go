@@ -1,3 +1,5 @@
+// +build !windows
+
 // Copyright 2015 Bjørn Erik Pedersen <bjorn.erik.pedersen@gmail.com>
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,12 +14,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package main
+package cmd
 
 import (
-	"github.com/bep/killswitch/cmd"
+	"io"
+	"log"
+	"log/syslog"
+	"os"
 )
 
-func main() {
-	cmd.Execute()
+var logWriter io.Writer
+
+func init() {
+	syslogWriter, e := syslog.New(syslog.LOG_NOTICE, "killswitch")
+
+	if e != nil {
+		logWriter = io.MultiWriter(syslogWriter, os.Stdout)
+	} else {
+		logWriter = os.Stdout
+	}
+
+	log.SetOutput(logWriter)
+	log.SetPrefix("killswitch")
 }

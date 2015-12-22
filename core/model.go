@@ -15,7 +15,6 @@
 package core
 
 type Context struct {
-	Verbose    bool
 	Executable string
 	Args       string
 	Interval   int

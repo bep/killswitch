@@ -16,8 +16,16 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"log"
+	"os"
 )
+
+type userError struct {
+	s string
+}
+
+func (u userError) Error() string {
+	return u.s
+}
 
 var cfgFile string
 var executable string
@@ -27,22 +35,27 @@ var verbose bool
 
 var rootCmd = &cobra.Command{
 	Use:   "killswitch",
-	Short: "A service to run on your PC to programs when certain conditions are met",
-	Long:  `A service to run on your PC to programs when certain conditions are met.`,
+	Short: "Wrap your sensitive application with a kill switch",
+	Long:  `Wrap your sensitive application with a kill switch.`,
 }
 
 func Execute() {
-	rootCmd.SilenceErrors = true
+
+	rootCmd.SetOutput(logWriter)
 	rootCmd.SilenceUsage = true
 
-	if err := rootCmd.Execute(); err != nil {
-		log.Println("Execute failed:", err)
+	if c, err := rootCmd.ExecuteC(); err != nil {
+		if _, ok := err.(userError); ok {
+			c.Println("")
+			c.Println(c.UsageString())
+		}
+
+		os.Exit(-1)
 	}
 }
 
 func init() {
-	rootCmd.PersistentFlags().StringVarP(&executable, "exec", "e", "", "The program to execute")
+	rootCmd.PersistentFlags().StringVarP(&executable, "exec", "e", "", "The program to watch")
 	rootCmd.PersistentFlags().StringVarP(&execArgs, "args", "a", "", "The program argument list")
 	rootCmd.PersistentFlags().IntVar(&interval, "interval", 5, "Interval between checks in seconds")
-	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "Enable verbose logging")
 }

@@ -16,7 +16,6 @@ package condition
 
 import (
 	"github.com/bep/killswitch/core"
-	"log"
 	"net"
 )
 
@@ -30,26 +29,13 @@ func (n networkInterfaceConditional) Valid(ctx *core.Context) (bool, error) {
 		return false, err
 	}
 
-	match := false
-
-	if ctx.Verbose {
-		log.Printf("Network interfaces (%d):\n", len(networkInterfaces))
-	}
-
-	for i, in := range networkInterfaces {
-
-		if !match && in.Name == n.name {
-			match = true
+	for _, in := range networkInterfaces {
+		if in.Name == n.name {
+			return true, nil
 		}
 
-		if ctx.Verbose {
-			addrs, _ := in.Addrs()
-			log.Println(i+1, in.Name, addrs)
-		} else if match {
-			break
-		}
 	}
-	return match, nil
+	return false, nil
 }
 
 func NewNetworkInterfaceConditional(name string) core.Conditional {
