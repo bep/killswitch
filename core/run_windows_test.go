@@ -16,7 +16,7 @@ func TestRun(t *testing.T) {
 	go func() {
 		err := Run(ctx, c)
 		if err != nil {
-			t.Errorf("Run() returned err: %s", err)
+			t.Fatalf("Run() returned err: %s", err)
 		}
 		atomic.AddUint64(&finished, 1)
 

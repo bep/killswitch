@@ -15,22 +15,37 @@
 package condition
 
 import (
+	"fmt"
 	"github.com/bep/killswitch/core"
 	"log"
-	"os"
 	"os/exec"
+	"sync/atomic"
 )
 
 type execConditional struct {
 	execPath string
+
+	//  used in tests
+	appendCounter bool
+	opCounter     uint64
 }
 
-func (n execConditional) Valid(ctx *core.Context) (bool, error) {
+func (c *execConditional) execAndArgs() (string, []string) {
+	atomic.AddUint64(&c.opCounter, 1)
+	if !c.appendCounter {
+		return c.execPath, []string{}
+	}
+	return c.execPath, []string{fmt.Sprintf("%d", c.getOpCounter())}
+}
 
-	c := exec.Command(n.execPath)
-	c.Stdin = os.Stdin
-	c.Stdout = os.Stdout
-	c.Stderr = os.Stderr
+func (c *execConditional) getOpCounter() uint64 {
+	return atomic.LoadUint64(&c.opCounter)
+}
+
+func (n *execConditional) Valid(ctx *core.Context) (bool, error) {
+
+	executable, args := n.execAndArgs()
+	c := exec.Command(executable, args...)
 
 	err := c.Run()
 
@@ -40,11 +55,16 @@ func (n execConditional) Valid(ctx *core.Context) (bool, error) {
 		}
 		log.Printf("error: Verify Run: %s", err)
 		return false, err
+
 	}
 
 	return true, nil
 }
 
 func NewExecConditional(execPath string) core.Conditional {
-	return execConditional{execPath: execPath}
+	return &execConditional{execPath: execPath}
+}
+
+func newExecConditionalWithCounter(execPath string) *execConditional {
+	return &execConditional{execPath: execPath, appendCounter: true}
 }
