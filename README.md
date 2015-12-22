@@ -10,7 +10,7 @@
  go get -v github.com/bep/killswitch
 ```
 
-This application has been confirmed to work fine on OS X, and Linux, and Windows.
+This application has been confirmed to work fine on OS X, and Linux, and Windows. Desktop notifications implemented on OS X and Linux.
 
 ## Use
 

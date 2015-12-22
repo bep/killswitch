@@ -1,4 +1,4 @@
-// +build windows
+// +build linux
 
 // Copyright 2015 Bjørn Erik Pedersen <bjorn.erik.pedersen@gmail.com>
 //
@@ -18,9 +18,21 @@ package core
 
 import (
 	"log"
+	"os/exec"
 )
+
+var notifySendMissingLogged bool
 
 func notify(title, message string) error {
 	log.Printf("%s: %s\n", title, message)
+
+	if !notifySendMissingLogged {
+		err := exec.Command("notify-send", title, message).Run()
+		if err != nil {
+			notifySendMissingLogged = true
+			log.Println("error: Cannot send notifications on Linux:", err)
+		}
+	}
+
 	return nil
 }
