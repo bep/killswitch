@@ -19,48 +19,35 @@ import (
 	"github.com/bep/killswitch/condition"
 	"github.com/bep/killswitch/core"
 	"github.com/spf13/cobra"
-	"net"
 )
 
-var networkInterface string
+var heartbeatScript string
 
-var netinterfaceCmd = &cobra.Command{
-	Use:   "net",
-	Short: "Will kill your executable if a given network interface vanishes",
+var execCmd = &cobra.Command{
+	Use:   "exec",
+	Short: "Will kill your executable if your provided script exits with an error code",
+	Long: `Will kill your executable if your provided script exits with an error code
+	
+The script (typically a shell script on *nix or a cmd- or bat-script on Windows) must exit with a non-0 exit-code 
+to signal that the application under watch should be killed.
 
+See /testfiles for example scripts for both *nix and Windows.
+
+If the script is not present on the PATH, the full path must be provided in name.
+	`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(executable) == 0 {
 			return userError{"Must provide an executable to watch. Note that this must either in PATH or set as a full path."}
 		}
-		fmt.Printf("Starting %s with kill switch on interface %s ...\n", executable, heartbeatScript)
-		conditional := condition.NewNetworkInterfaceConditional(heartbeatScript)
+		fmt.Printf("Starting %s with kill switch script %s ...\n", executable, heartbeatScript)
+		conditional := condition.NewExecConditional(heartbeatScript)
 		ctx := &core.Context{Executable: executable, Args: execArgs, Interval: interval}
 		return core.Run(ctx, conditional)
 	},
 }
 
-var listInterfacesCmd = &cobra.Command{
-	Use:   "list",
-	Short: "List your network interfaces",
-
-	RunE: func(cmd *cobra.Command, args []string) error {
-		networkInterfaces, err := net.Interfaces()
-		if err != nil {
-			return err
-		}
-		fmt.Printf("Network interfaces (%d):\n", len(networkInterfaces))
-		for i, in := range networkInterfaces {
-			addrs, _ := in.Addrs()
-			fmt.Println(i+1, in.Name, addrs)
-		}
-		return nil
-
-	},
-}
-
 func init() {
-	rootCmd.AddCommand(netinterfaceCmd)
-	netinterfaceCmd.AddCommand(listInterfacesCmd)
+	rootCmd.AddCommand(execCmd)
 
-	netinterfaceCmd.Flags().StringVarP(&heartbeatScript, "name", "n", "", "The name of the network interface that must be present")
+	execCmd.Flags().StringVarP(&heartbeatScript, "name", "n", "", "The name of the script to use as heartbeat script. If not on PATH, the full path must be provided.")
 }
