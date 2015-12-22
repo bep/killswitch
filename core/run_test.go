@@ -1,8 +1,7 @@
-// +build linux darwin
-
 package core
 
 import (
+	"runtime"
 	"sync/atomic"
 	"testing"
 	"time"
@@ -11,7 +10,14 @@ import (
 const limit = 4
 
 func TestRun(t *testing.T) {
-	ctx := &Context{Executable: "/usr/bin/yes", Interval: 1}
+
+	testExecutable := "/usr/bin/yes"
+
+	if runtime.GOOS == "windows" {
+		testExecutable = "notepad.exe"
+	}
+
+	ctx := &Context{Executable: testExecutable, Interval: 1}
 	c := &countingConditional{counter: 0, limit: limit}
 	var finished uint64
 
