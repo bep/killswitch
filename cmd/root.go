@@ -36,7 +36,13 @@ var verbose bool
 var rootCmd = &cobra.Command{
 	Use:   "killswitch",
 	Short: "Wrap your sensitive application with a kill switch",
-	Long:  `Wrap your sensitive application with a kill switch.`,
+	Long: `Wrap your sensitive application with a kill switch.
+	
+Provide a path to the program to watch and its arguments (optional), and then a conditional.
+
+The conditional can be a built-in (see the net command) or a heartbeat-script
+you can write yourself (see the exec command).
+`,
 }
 
 func Execute() {
