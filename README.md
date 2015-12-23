@@ -2,6 +2,10 @@
 
 [![Build Status](https://travis-ci.org/bep/killswitch.svg)](https://travis-ci.org/bep/killswitch) [![Build status](https://ci.appveyor.com/api/projects/status/7mbikfi6sxyq7phh?svg=true)](https://ci.appveyor.com/project/bjornerik/killswitch)
 
+This is a general-purpose and cross-platform application kill switch written in Go. The main use case is to protect applications running with the VPN when the VPN dies, and still keep general network connectivity. But it's extendable, so a time based kill switch for your develpoment IDE should also be possible: "Sorry, boss. My development environment will not start during Christmas!"
+
+>"A kill switch, also known as an emergency stop or e-stop, is a safety mechanism used to shut off a device in an emergency situation in which it cannot be shut down in the usual manner. (Wikipedia)"
+
 ## Install
 
 **Killswitch** is a Go application. The easiest way to intall it is via `go get`:
