@@ -16,6 +16,10 @@ This is a general-purpose and cross-platform application kill switch written in 
 
 This application has been confirmed to work fine on OS X, and Linux, and Windows. Desktop notifications implemented on OS X and Linux.
 
+## Is it any good?
+
+[Yes](https://news.ycombinator.com/item?id=3067434)
+
 ## Use
 
 Wrap your sensitive application with a kill switch.
