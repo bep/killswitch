@@ -14,12 +14,14 @@
 
 package core
 
+// Context defines the program to kill.
 type Context struct {
 	Executable string
 	Args       string
 	Interval   int
 }
 
+// Conditional defines when to kill the program.
 type Conditional interface {
 	Valid(ctx *Context) (bool, error)
 }

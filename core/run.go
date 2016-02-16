@@ -24,6 +24,7 @@ import (
 	"time"
 )
 
+// Run runs the exectutable defined in ctx and applies the conditionals.
 func Run(ctx *Context, conditionals ...Conditional) error {
 
 	// do a prestart check
@@ -100,8 +101,6 @@ func Run(ctx *Context, conditionals ...Conditional) error {
 			return nil
 		}
 	}
-
-	return nil
 
 }
 

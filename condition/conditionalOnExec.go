@@ -42,12 +42,12 @@ func (c *execConditional) getOpCounter() uint64 {
 	return atomic.LoadUint64(&c.opCounter)
 }
 
-func (n *execConditional) Valid(ctx *core.Context) (bool, error) {
+func (c *execConditional) Valid(ctx *core.Context) (bool, error) {
 
-	executable, args := n.execAndArgs()
-	c := exec.Command(executable, args...)
+	executable, args := c.execAndArgs()
+	cmd := exec.Command(executable, args...)
 
-	err := c.Run()
+	err := cmd.Run()
 
 	if err != nil {
 		if _, ok := err.(*exec.ExitError); ok {
@@ -61,6 +61,8 @@ func (n *execConditional) Valid(ctx *core.Context) (bool, error) {
 	return true, nil
 }
 
+// NewExecConditional creates a Conditional that is valid unless the
+// executable defined by execPath returns non-zero exit code.
 func NewExecConditional(execPath string) core.Conditional {
 	return &execConditional{execPath: execPath}
 }

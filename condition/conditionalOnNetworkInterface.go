@@ -38,6 +38,8 @@ func (n networkInterfaceConditional) Valid(ctx *core.Context) (bool, error) {
 	return false, nil
 }
 
+// NewNetworkInterfaceConditional creates a Conditional that is valid
+// as long as the named network interface is present.
 func NewNetworkInterfaceConditional(name string) core.Conditional {
 	return networkInterfaceConditional{name: name}
 }

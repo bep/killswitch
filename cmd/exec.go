@@ -47,7 +47,7 @@ If the script is not present on the PATH, the full path must be provided in name
 }
 
 func init() {
-	RootCmd.AddCommand(execCmd)
+	rootCmd.AddCommand(execCmd)
 
 	execCmd.Flags().StringVarP(&heartbeatScript, "name", "n", "", "The name of the script to use as heartbeat script. If not on PATH, the full path must be provided.")
 }
