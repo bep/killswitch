@@ -1,5 +1,7 @@
 # Application Kill Switch
 
+
+[![GoDoc](https://godoc.org/github.com/bep/killswitch?status.svg)](https://godoc.org/github.com/bep/killswitch)
 [![Build Status](https://travis-ci.org/bep/killswitch.svg)](https://travis-ci.org/bep/killswitch) [![Build status](https://ci.appveyor.com/api/projects/status/7mbikfi6sxyq7phh?svg=true)](https://ci.appveyor.com/project/bjornerik/killswitch)
 
 This is a general-purpose and cross-platform application kill switch written in Go. The main use case is to protect applications running with the VPN when the VPN dies, and still keep general network connectivity. But it's extendable, so a time based kill switch for your develpoment IDE should also be possible: "Sorry, boss. My development environment will not start during Christmas!"
