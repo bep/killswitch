@@ -15,8 +15,9 @@
 package condition
 
 import (
-	"github.com/bep/killswitch/core"
 	"net"
+
+	"github.com/bep/killswitch/core"
 )
 
 type networkInterfaceConditional struct {
