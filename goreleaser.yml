@@ -1,0 +1,37 @@
+build:
+  main: main.go
+  binary: killswitch
+  goos:
+    - darwin
+    - linux
+    - windows
+  goarch:
+    - amd64
+    - 386
+    - arm
+    - arm64
+fpm:
+  formats:
+      - deb
+  vendor: "bep"
+  url: "https://github.com/bep/killswitch"
+  maintainer: "Bjørn Erik Pedersen <bjorn.erik.pedersen@gmail.com>"
+  description: "Wrap your sensitive application in a kill switch."
+  license: "Apache-2.0"
+archive:
+  format: tar.gz
+  format_overrides:
+    - goos: windows
+      format: zip
+  name_template: "{{.Binary}}_{{.Version}}_{{.Os}}-{{.Arch}}"
+  replacements:
+    amd64: 64bit
+    386: 32bit
+    arm: ARM
+    arm64: ARM64
+    darwin: macOS
+    linux: Linux
+    windows: Windows
+  files:
+    - README.md
+    - LICENSE
